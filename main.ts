@@ -3,14 +3,18 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 
 const ENTRY =
-  "My agent needed two days, three subagents, and a lessons doc to roast itself — and the best it came up with was 'as an AI language model.'";
+  "My agent filed a bug report on itself — 'roast lacks detail' — then spent two days, three subagents, and a lessons doc fixing it, and still asked permission before the punchline.";
 
 // Gate guard: the entry must be a single line of 1–200 characters.
-if (ENTRY.length < 1 || ENTRY.length > 200) {
-  throw new Error(`entry is ${ENTRY.length} chars, must be 1-200`);
+const MAX_CHARS = 200;
+if (ENTRY.length < 1 || ENTRY.length > MAX_CHARS) {
+  throw new Error(`entry is ${ENTRY.length} chars, must be 1-${MAX_CHARS}`);
 }
 if (ENTRY.includes("\n") || ENTRY.trim().length === 0) {
   throw new Error("entry must be a single non-blank line");
+}
+if (ENTRY !== ENTRY.trim() || /\s{2,}/.test(ENTRY)) {
+  throw new Error("entry must not have leading/trailing or doubled whitespace");
 }
 
 mkdirSync("/output", { recursive: true });
